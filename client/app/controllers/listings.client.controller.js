@@ -66,7 +66,7 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
       Listings.create(listing)
               .then(function(response) {
                 //if the object is successfully saved redirect back to the list page
-                $state.go('listings.list', { successMessage: 'Listing succesfully created!' });
+                $state.go('listings.list', { successMessage: 'Listing successfully created!' });
               }, function(error) {
                 //otherwise display the error
                 $scope.error = 'Unable to save listing!\n' + error;
@@ -80,26 +80,37 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
         occurs, pass it to $scope.error. 
        */
       $scope.error = null;
+      var id = $stateParams.listingId;
 
       if (!isValid) {
           $scope.$broadcast('show-errors-check-validity', 'articleForm');
 
           return false;
       }
-
-
-    };
+      var listing = {
+        name: $scope.name,
+        code: $scope.code,
+        address: $scope.address
+      };
+      Listings.update(id, listing)
+              .then(function(response) {
+                //if the object is successfully saved redirect back to the list page
+                $state.go('listings.list', { successMessage: 'Listing successfully updated!' });
+            }, function(error) {
+                //otherwise display the error
+                $scope.error = 'Unable to update listing!\n' + error;
+            });
+      };
 
     $scope.remove = function() {
       var id = $stateParams.listingId;
 
-      Listings.read(id)
+      Listings.delete(id)
               .then(function(response) {
-                var index = $scope.listings.indexOf(id);
-                $scope.listings.splice(index, 1);
-                $state.go('listings.list', { successMessage: 'Listing successfully deleted!' });
+              $state.go('listings.list', { successMessage: 'Listing successfully deleted!' });
           }, function(error) {
-                $scope.error = 'Unable to delete listing!\n' + error;
+              //otherwise display the error
+              $scope.error = 'Unable to delete listing!\n' + error;
           });
     };
 

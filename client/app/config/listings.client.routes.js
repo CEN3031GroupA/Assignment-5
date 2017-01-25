@@ -9,7 +9,7 @@ angular.module('listings').config(['$stateProvider', '$urlRouterProvider',
       })
       .state('listings.list', {
         url: '', 
-        templateUrl: 'app/views/list-listings.client.view.html', 
+        templateUrl: 'app/views/list-listings.client.view.html',
         params: {
           successMessage: null
         }
