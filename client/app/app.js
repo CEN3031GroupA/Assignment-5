@@ -15,6 +15,7 @@ app.config(['$urlRouterProvider', '$locationProvider',
   }
 ]);
 
+
 /* set the initial state of the application */
 app.run(['$state', 
   function($state) {
