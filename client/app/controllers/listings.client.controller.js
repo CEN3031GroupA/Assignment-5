@@ -15,7 +15,6 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
     };
 
     $scope.findOne = function() {
-      debugger;
       $scope.loading = true;
 
       /*
@@ -79,13 +78,36 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
         successfully finished, navigate back to the 'listing.list' state using $state.go(). If an error 
         occurs, pass it to $scope.error. 
        */
+
+        $scope.error = null;
+
+      /*
+       Check that the form is valid. (https://github.com/paulyoder/angular-bootstrap-show-errors)
+       */
+        if (!isValid) {
+            $scope.$broadcast('show-errors-check-validity', 'articleForm');
+
+            return false;
+        }
+
+        Listings.update($scope.listing._id, $scope.listing)
+            .then(function(response) {
+                //if the object is successfully saved redirect back to the list page
+                $state.go('listings.list', { successMessage: 'Listing succesfully updated!' });
+            }, function(error) {
+                //otherwise display the error
+                $scope.error = 'Unable to save listing!\n' + error;
+            });
     };
 
     $scope.remove = function() {
-      /*
-        Implement the remove function. If the removal is successful, navigate back to 'listing.list'. Otherwise, 
-        display the error. 
-       */
+        Listings.delete($scope.listing._id)
+            .then(function() {
+                $state.go('listings.list', { successMessage: 'Listing succesfully deleted!' });
+            }, function(error) {
+                //otherwise display the error
+                $scope.error = 'Unable to delete listing!\n' + error;
+            });
     };
 
     /* Bind the success message to the scope if it exists as part of the current state */
@@ -100,6 +122,34 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
         longitude: -82.3410518
       }, 
       zoom: 14
-    }
+    };
+
+    $scope.loadMarkers = function() {
+      /* set loader*/
+        $scope.loading = true;
+
+      /* Get all the listings, then bind it to the scope */
+      Listings.getAll().then(function(response) {
+          $scope.loading = false; //remove loader
+          $scope.listings = response.data;
+
+          $scope.markers = [];
+          for (var i = 0; i < $scope.listings.length; i++) {
+              $scope.markers.push(Object.assign({}, $scope.listings[i], {
+                id: i, // required due to angular-google-maps library
+                latitude: $scope.listings[i].coordinates.latitude,
+                longitude: $scope.listings[i].coordinates.longitude,
+                show: false
+              }));
+          }
+      }, function(error) {
+          $scope.loading = false;
+          $scope.error = 'Unable to retrieve listings!\n' + error;
+      });
+    };
+
+    $scope.onMarkerClick = function(marker, eventName, model) {
+        model.show = !model.show;
+    };
   }
 ]);
