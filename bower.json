@@ -1,9 +1,9 @@
 {
-  "name": "Assignment5",
+  "name": "assignmentfive",
   "version": "1.0.0",
   "homepage": "https://github.com/medhir/assignment4",
   "authors": [
-    "Medhir Bhargava <medhirbhargava@gmail.com>"
+    "amy ly"
   ],
   "description": "Implementing state using Angular UI Router",
   "license": "MIT",
