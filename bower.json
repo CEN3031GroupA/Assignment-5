@@ -22,5 +22,8 @@
     "bootstrap": "~3.3.6",
     "angular-google-maps": "~2.2.1",
     "angular-bootstrap": "~0.14.3"
+  },
+  "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower install"
   }
 }
