@@ -7,7 +7,7 @@ module.exports = {
         uri: 'mongodb://admin:admin123@ds111559.mlab.com:11559/sandbox', //place the URI of your mongo database here.
     },
     googleMaps: {
-        key: 'AIzaSyCte6H2BCsUXGu4l37m67Ohohl33W4dzuw'
+        key: 'AIzaSyCns6-TdJOTJPKqNH_9YwxuyE3oukpwmTY'
     },
     port: 80
 };
